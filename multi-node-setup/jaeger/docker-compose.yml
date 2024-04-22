@@ -1,0 +1,22 @@
+version: '3'
+services:
+  jaeger:
+    restart: always
+    image: jaegertracing/all-in-one:1.56
+    container_name: jaeger
+    ports:
+      - "16686:16686"   # Jaeger UI
+      - "6831:6831/udp"
+      - "14269:14269"
+      - "4444:4317"     # use other ports to avoid conflict with fluent-bit
+      - "4445:4318"     # use other ports to avoid conflict with fluent-bit
+
+    env_file:
+      - .env
+    
+    networks:
+      - multi-node-setup-network
+
+networks:
+  multi-node-setup-network:
+    external: true

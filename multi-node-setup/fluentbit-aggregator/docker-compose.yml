@@ -1,0 +1,18 @@
+version: '3'
+services:
+  fluentbit:
+    container_name: fluentbit-test
+    image: fluent/fluent-bit:3.0
+    ports:
+      - 2022:2022
+    volumes:
+      - ./config/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+    env_file:
+      - .env
+    
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    external: true

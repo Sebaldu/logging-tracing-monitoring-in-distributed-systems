@@ -25,7 +25,7 @@ with the following tools:
   For varius visualizations and dashboards and querying the data stored in opensearch.
 
 - hotrod
-  A simple application that generates traces and logs.
+  A simple application that generates traces.
   (for demonstration purposes)
 
 ## Setup
@@ -142,6 +142,6 @@ The fluentbit forwarder needs to be running on each machine you want to monitor 
 The process is the same as for the fluentbit aggregator.
 
 #### Last but not least, the hotrod application
-Same as with the other services.
+Same as with the other services. (Requires no .env file)
 The hotrod ui will be available at `http://ip_of_hotrod_host:8080`
 There you can generate sample traces.

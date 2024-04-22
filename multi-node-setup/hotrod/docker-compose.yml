@@ -1,0 +1,18 @@
+version: '3'
+services:
+  hotrod:
+    restart: always
+    image: jaegertracing/example-hotrod:1.56
+    ports:
+      - "8080:8080"
+      - "8083:8083"
+    command: ["all"]
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://fluentbit-forwarder:4318
+    
+    networks:
+      - multi-node-setup-network
+
+networks:
+  multi-node-setup-network:
+    external: true

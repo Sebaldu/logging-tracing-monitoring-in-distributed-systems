@@ -1,0 +1,26 @@
+version: '3'
+services:
+  fluentbit-forwarder:
+    restart: always
+    container_name: fluentbit-forwarder
+    image: fluent/fluent-bit:3.0
+    ports:
+      - 2021:2021 # Forwarder port
+      - 4318:4318 # OpenTelemetry port
+    volumes:
+      # fluentbit forwarding configuration
+      - ./config/fluent-bit-forwarder-config/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+
+      # For monitoring host metrics inside the container
+      - /proc:/host/proc
+      - /sys:/host/sys
+    
+    env_file:
+      - .env
+    
+    networks:
+      - multi-node-setup-network
+
+networks:
+  multi-node-setup-network:
+    external: true
