@@ -44,14 +44,42 @@ Afterwards, run the following command:
 docker-compose up
 ```
 
-After all services have started you need to run the following scripts to create the necessary index patterns and visualizations in opensearch.
+After all services have started you need to run the following commands to create the index-patterns in opensearch.
 ```bash
-NOT YET IMPLEMENTED
+curl --request POST \
+  --url http://localhost:5601/api/saved_objects/index-pattern \
+  --header 'Content-Type: application/json' \
+  --header 'osd-xsrf: true' \
+  --data '{
+  "attributes": {
+    "title": "cpu-index",
+    "timeFieldName": "@timestamp",
+    "fields": "[{\"count\":0,\"name\":\"@timestamp\",\"type\":\"date\",\"esTypes\":[\"date\"],\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":true},{\"count\":0,\"name\":\"_id\",\"type\":\"string\",\"esTypes\":[\"_id\"],\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":false},{\"count\":0,\"name\":\"_index\",\"type\":\"string\",\"esTypes\":[\"_index\"],\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":false},{\"count\":0,\"name\":\"_score\",\"type\":\"number\",\"scripted\":false,\"searchable\":false,\"aggregatable\":false,\"readFromDocValues\":false},{\"count\":0,\"name\":\"_source\",\"type\":\"_source\",\"esTypes\":[\"_source\"],\"scripted\":false,\"searchable\":false,\"aggregatable\":false,\"readFromDocValues\":false},{\"count\":0,\"name\":\"_type\",\"type\":\"string\",\"scripted\":false,\"searchable\":false,\"aggregatable\":false,\"readFromDocValues\":false},{\"count\":0,\"name\":\"cpu_p\",\"type\":\"number\",\"esTypes\":[\"float\"],\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":true},{\"count\":0,\"name\":\"hostname\",\"type\":\"string\",\"esTypes\":[\"text\"],\"scripted\":false,\"searchable\":true,\"aggregatable\":false,\"readFromDocValues\":false},{\"count\":0,\"name\":\"hostname.keyword\",\"type\":\"string\",\"esTypes\":[\"keyword\"],\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":true,\"subType\":{\"multi\":{\"parent\":\"hostname\"}}}]"
+  }
+}'
+```
+
+```bash
+curl --request POST \
+  --url http://localhost:5601/api/saved_objects/index-pattern \
+  --header 'Content-Type: application/json' \
+  --header 'osd-xsrf: true' \
+  --data '{
+  "attributes": {
+    "title": "mem-index",
+    "timeFieldName": "@timestamp",
+    "fields": "[{\"count\":0,\"name\":\"@timestamp\",\"type\":\"date\",\"esTypes\":[\"date\"],\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":true},{\"count\":0,\"name\":\"_id\",\"type\":\"string\",\"esTypes\":[\"_id\"],\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":false},{\"count\":0,\"name\":\"_index\",\"type\":\"string\",\"esTypes\":[\"_index\"],\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":false},{\"count\":0,\"name\":\"_score\",\"type\":\"number\",\"scripted\":false,\"searchable\":false,\"aggregatable\":false,\"readFromDocValues\":false},{\"count\":0,\"name\":\"_source\",\"type\":\"_source\",\"esTypes\":[\"_source\"],\"scripted\":false,\"searchable\":false,\"aggregatable\":false,\"readFromDocValues\":false},{\"count\":0,\"name\":\"_type\",\"type\":\"string\",\"scripted\":false,\"searchable\":false,\"aggregatable\":false,\"readFromDocValues\":false},{\"count\":0,\"name\":\"hostname\",\"type\":\"string\",\"esTypes\":[\"text\"],\"scripted\":false,\"searchable\":true,\"aggregatable\":false,\"readFromDocValues\":false},{\"count\":0,\"name\":\"hostname.keyword\",\"type\":\"string\",\"esTypes\":[\"keyword\"],\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":true,\"subType\":{\"multi\":{\"parent\":\"hostname\"}}},{\"count\":0,\"name\":\"memFree\",\"type\":\"number\",\"esTypes\":[\"long\"],\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":true},{\"count\":0,\"name\":\"memTotal\",\"type\":\"number\",\"esTypes\":[\"long\"],\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":true},{\"count\":0,\"name\":\"memUsed\",\"type\":\"number\",\"esTypes\":[\"long\"],\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":true}]"
+  }
+}'
 ```
 opensearch dashboards will be available at `http://localhost:5601`
 
-the Visualizations can be found in Dashboards -> Stats (Cpu Usage and Memory Usage)
-for querying the data stored in opensearch, there are better examples in the opensearch documentation.
+Click the Hamburger menu in the top left corner.
+Go to Dashboards Management -> Saved Objects -> Import
+And select the `dashboards.ndjson` file from the `single-node-setup` directory.
+
+The Dashboard with its Visualizations can be found in Dashboards in the Hamburguer menu and should be selected as the default dashboard.
+For querying the data stored in opensearch, there are better examples in the opensearch documentation.
 
 jaeger ui will be available at             `http://localhost:16686`
 
