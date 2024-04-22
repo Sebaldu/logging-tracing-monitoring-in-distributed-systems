@@ -85,32 +85,63 @@ jaeger ui will be available at             `http://localhost:16686`
 
 hotrod will be available at                `http://localhost:8080`
 
-### Multi-node setup
 
-# Not yet implemented
+
+### Multi-node setup
 
 Each machine needs to have docker and docker-compose installed.
 For running multiple docker containers that need to communicate with each other, 
 you need to create a network on each machine.
 ```bash
-docker network create my_network
+docker network create multi-node-setup-network
 ```
-Also the max_map_count needs to be increased on the machine running opensearch.
+
+#### Start with the opensearch instance
+The machine running opensearch might need the max_map_count to be increased.
 ```bash
 sudo sysctl -w vm.max_map_count=262144
 ```
 
-Copy the fluentbit directory to each machine.
-Copy the .env.example file to .env and set the values for the environment variables.
+Copy the opensearch directory to the machine that will run opensearch.
+Run the following command in the opensearch directory:
+```bash
+docker-compose up -d
+```
+Opensearch dashboards will be available at `http://ip_of_opensearch_host:5601`
 
-Spread one instance of all the remainig services among the machines.
-Copy the .env.example file to .env and set the values for the environment variables.
+Create the index-patterns with the following commands:
+```bash
+NOT IMPLEMENTED YET
+```
 
-opensearch dashboards will be available at `http://ip_of_opensearch_host:5601`
+```bash
+NOT IMPLEMENTED YET
+```
 
-the Visualizations can be found in Dashboards -> Stats (Cpu Usage and Memory Usage)
-for querying the data stored in opensearch, there are better examples in the opensearch documentation.
+Import the dashboard by following these steps:
 
-jaeger ui will be available at             `http://ip_of_jaeger_host:16686`
+#### NOT IMPLEMENTED YET
 
-hotrod will be available at                `http://ip_of_hotrod_host:8080`
+#### Jaeger is next
+Copy the jaeger directory to the machine that will run jaeger.
+Inside the jaeger directory, copy the .env.example file to .env and set the values for the environment variables.
+
+Afterwards, run the following command:
+```bash
+docker-compose up -d
+```
+Jaeger UI will be available at `http://ip_of_jaeger_host:16686`
+
+#### Next up is the fluentbit aggregator
+Copy the fluentbit-aggregator directory to the machine that will run the fluentbit aggregator.
+Inside the fluentbit-aggregator directory, copy the .env.example file to .env and set the values for the environment variables.
+And run the container.
+
+#### Next up is the fluentbit forwarder
+The fluentbit forwarder needs to be running on each machine you want to monitor or deploy applications on that create traces with opentelemetry.
+The process is the same as for the fluentbit aggregator.
+
+#### Last but not least, the hotrod application
+Same as with the other services.
+The hotrod ui will be available at `http://ip_of_hotrod_host:8080`
+There you can generate sample traces.
