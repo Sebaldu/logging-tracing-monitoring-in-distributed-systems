@@ -109,18 +109,99 @@ docker-compose up -d
 ```
 Opensearch dashboards will be available at `http://ip_of_opensearch_host:5601`
 
-Create the index-patterns with the following commands:
+Post the indices to opensearch with the following commands:
+Make sure to replace `YOUR_OPENSEARCH_HOST` with the ip or hostname of the machine running opensearch.
 ```bash
-NOT IMPLEMENTED YET
+curl --request PUT \
+  --url http://your_opensearch_host:9200/mem-index \
+  --header 'Content-Type: application/json' \
+  --data '{   
+	"mappings": 
+	{     
+		"properties": 
+		{       
+			"memFree": 
+			{         
+				"type": "float"       
+			},       
+			"memUsed": 
+			{         
+				"type": "float"       
+			},       
+			"memTotal": 
+			{         
+				"type": "float"       
+			},       
+			"hostname": 
+			{         
+				"type": "keyword"       
+			},     
+			"@timestamp": 
+			{
+				"type": "date"
+			}
+		}
+	}
+}'
 ```
 
 ```bash
-NOT IMPLEMENTED YET
+curl --request PUT \
+  --url http://YOUR_OPENSEARCH_HOST:9200/cpu-index \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "mappings": {
+    "properties": {
+      "cpu_p": {
+        "type": "float"
+      },
+      "hostname": {
+        "type": "keyword"
+      },
+      "@timestamp": {
+        "type": "date"
+      }
+    }
+  }
+}'
+```
+
+Create the index-patterns with the following commands:
+```bash
+curl --request POST \
+  --url http://YOUR_OPENSEARCH_HOST:5601/api/saved_objects/index-pattern \
+  --header 'Content-Type: application/json' \
+  --header 'osd-xsrf: true' \
+  --data '{
+"attributes": {
+				"title": "mem-index",
+				"timeFieldName": "@timestamp",
+				"fields": "[{\"count\":0,\"script\":\"if (doc['memTotal'].size() == 0) {\\n    return 0; // guard against division by zero\\n} else {\\n    double memTotal = doc['memTotal'].value;\\n    double memUsed = doc['memUsed'].value;\\n    return (memUsed / memTotal) * 100;\\n}\",\"lang\":\"painless\",\"name\":\"memory_usage_percent\",\"type\":\"number\",\"scripted\":true,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":false}]"
+  }
+}'
+```
+
+```bash
+curl --request POST \
+  --url http://YOUR_OPENSEARCH_HOST:5601/api/saved_objects/index-pattern \
+  --header 'Content-Type: application/json' \
+  --header 'osd-xsrf: true' \
+  --data '{
+"attributes": {
+				"title": "cpu-index",
+				"timeFieldName": "@timestamp"
+  }
+}'
 ```
 
 Import the dashboard by following these steps:
 
-#### NOT IMPLEMENTED YET
+opensearch dashboards will be available at `http://localhost:5601`
+
+Click the Hamburger menu in the top left corner.
+Go to Dashboards Management -> Saved Objects -> Import
+And select the `dashboards.ndjson` file from the `multi-node-setup` directory.
+
 
 #### Jaeger is next
 Copy the jaeger directory to the machine that will run jaeger.
