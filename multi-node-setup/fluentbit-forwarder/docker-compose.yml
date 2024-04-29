@@ -9,7 +9,7 @@ services:
       - 4318:4318 # OpenTelemetry port
     volumes:
       # fluentbit forwarding configuration
-      - ./config/fluent-bit-forwarder-config/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+      - ./config/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
 
       # For monitoring host metrics inside the container
       - /proc:/host/proc

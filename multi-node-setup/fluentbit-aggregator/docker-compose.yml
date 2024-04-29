@@ -1,7 +1,7 @@
 version: '3'
 services:
   fluentbit:
-    container_name: fluentbit-test
+    container_name: fluentbit-aggregator
     image: fluent/fluent-bit:3.0
     ports:
       - 2022:2022
@@ -11,8 +11,8 @@ services:
       - .env
     
     networks:
-      - my_network
+      - multi-node-setup-network
 
 networks:
-  my_network:
+  multi-node-setup-network:
     external: true

@@ -21,10 +21,12 @@ services:
         soft: 65536 # Maximum number of open files for the opensearch user - set to at least 65536
         hard: 65536
     volumes:
-      - opensearch-data1:/usr/share/opensearch/data # Creates volume called opensearch-data1 and mounts it to the container
+      - opensearch-data:/usr/share/opensearch/data # Creates volume called opensearch-data1 and mounts it to the container
     ports:
       - 9200:9200 # REST API
       - 9600:9600 # Performance Analyzer
+    networks:
+      - multi-node-setup-network
   
   opensearch-dashboards:
     restart: always
@@ -37,6 +39,12 @@ services:
     environment:
       - 'OPENSEARCH_HOSTS=["http://opensearch-node1:9200"]'
       - "DISABLE_SECURITY_DASHBOARDS_PLUGIN=true" # disables security dashboards plugin in OpenSearch Dashboards
+    networks:
+      - multi-node-setup-network
 
 volumes:
-  opensearch-data1:
+  opensearch-data:
+
+networks:
+  multi-node-setup-network:
+    external: true
