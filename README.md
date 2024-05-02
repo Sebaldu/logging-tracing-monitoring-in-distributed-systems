@@ -24,9 +24,8 @@ with the following tools:
 - opensearch dashboards
   For varius visualizations and dashboards and querying the data stored in opensearch.
 
-- hotrod
-  A simple application that generates traces.
-  (for demonstration purposes)
+- two simple ASP.NET Core applications
+  To generate sample traces.
 
 ## Setup
 There are two ways to setup this system:
@@ -83,7 +82,7 @@ For querying the data stored in opensearch, there are better examples in the ope
 
 jaeger ui will be available at             `http://localhost:16686`
 
-hotrod will be available at                `http://localhost:8080`
+generate traces using the swagger ui at   `http://localhost:9999/swagger/index.html`
 
 
 
@@ -221,7 +220,11 @@ And run the container.
 The fluentbit forwarder needs to be running on each machine you want to monitor or deploy applications on that create traces with opentelemetry.
 The process is the same as for the fluentbit aggregator.
 
-#### Last but not least, the hotrod application
-Same as with the other services. (Requires no .env file)
-The hotrod ui will be available at `http://ip_of_hotrod_host:8080`
-There you can generate sample traces.
+#### Last but not least, ServiceA and ServiceB application
+Copy the according directory to the machine that will run the application.
+In the ServiceA directory copy the .env.example file to .env and set the values for the environment variables.
+ServiceB requires no .env file.
+
+Run docker-compose up -d in the directory of the applications.
+
+Afterwards you can generate traces using the swagger ui at `http://ip_of_serviceA_host:9999/swagger/index.html`

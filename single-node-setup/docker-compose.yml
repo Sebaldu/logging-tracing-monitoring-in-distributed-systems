@@ -91,16 +91,24 @@ services:
       - 'OPENSEARCH_HOSTS=["http://opensearch-node1:9200"]'
       - "DISABLE_SECURITY_DASHBOARDS_PLUGIN=true" # disables security dashboards plugin in OpenSearch Dashboards
 
-  hotrod:
-    restart: always
-    image: jaegertracing/example-hotrod:1.56
+  servicea:
+    container_name: servicea
+    build:
+      context: ../multi-node-setup/ServiceA/ServiceA
+      dockerfile: ./ServiceA/Dockerfile
     ports:
-      - "8080:8080"
-      - "8083:8083"
-    command: ["all"]
+      - "9999:8083" # Map the port used by the application to the host
     environment:
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://fluentbit-forwarder:4318
-    
+      - ASPNETCORE_HTTP_PORTS=8083
+      - SERVICEB_URL=http://serviceb:8080
+    depends_on:
+      - jaeger
+  
+  serviceb:
+    container_name: serviceb
+    build:
+      context: ../multi-node-setup/ServiceB/ServiceB
+      dockerfile: ./ServiceB/Dockerfile
     depends_on:
       - jaeger
 

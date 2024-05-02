@@ -51,14 +51,12 @@ void ConfigureServices(IServiceCollection services)
 					serviceVersion: builder.Configuration["ServiceVersion"]))
 			.AddAspNetCoreInstrumentation()
 			.AddHttpClientInstrumentation()
-			.AddOtlpExporter(options => options.Endpoint = new Uri("http://localhost:4318"));
+			.AddOtlpExporter(options => options.Endpoint = new Uri("http://fluentbit-forwarder:4318"));
 	});
-    
-	
-	// services.AddHttpClient();
+
 	services.AddHttpClient("ServiceBClient", client =>
 	{
-		client.BaseAddress = new Uri("http://localhost:5217/"); // URL for ServiceB
+		client.BaseAddress = new Uri(builder.Configuration["SERVICEB_URL"] ?? throw new ArgumentException("SERVICEB_URL must not be set"));
 	});
 }
 

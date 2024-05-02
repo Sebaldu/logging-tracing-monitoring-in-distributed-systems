@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  servicea:
+    container_name: servicea
+    build:
+      context: ./ServiceA
+      dockerfile: ./ServiceA/Dockerfile
+    ports:
+      - "9999:8080" # Map the port used by the application to the host
+    env_file:
+      - .env
+    networks:
+      - multi-node-setup-network
+
+networks:
+  multi-node-setup-network:
+    external: true

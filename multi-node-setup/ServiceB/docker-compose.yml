@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  serviceb:
+    container_name: serviceb
+    build:
+      context: ./ServiceB
+      dockerfile: ./ServiceB/Dockerfile
+    ports:
+      - "8888:8080" # Map the port used by the application to the host
+    env_file:
+      - .env
+    networks:
+      - multi-node-setup-network
+
+networks:
+  multi-node-setup-network:
+    external: true

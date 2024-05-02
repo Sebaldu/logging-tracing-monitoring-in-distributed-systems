@@ -1,5 +1,9 @@
+using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 
@@ -50,7 +54,7 @@ void ConfigureServices(IServiceCollection services)
                         serviceName: builder.Configuration["ServiceName"] ?? throw new ArgumentException("ServiceName must not be empty"),
                         serviceVersion: builder.Configuration["ServiceVersion"]))
                 .AddAspNetCoreInstrumentation()
-                .AddOtlpExporter(options => options.Endpoint = new Uri("http://localhost:4318"));
+                .AddOtlpExporter(options => options.Endpoint = new Uri("http://fluentbit-forwarder:4318"));
         });
 }
 

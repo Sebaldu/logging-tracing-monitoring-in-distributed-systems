@@ -1,5 +1,5 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using OpenTelemetry;
 using OpenTelemetry.Context.Propagation;
 using OpenTelemetry.Trace;
 
